@@ -25,11 +25,17 @@ const RootLayout = () => {
   if (!fontsLoaded && !error) return null;
 
   return (
-    <Stack>
+    <Stack screenOptions={{
+      animation: 'slide_from_right',
+      contentStyle: {
+        backgroundColor: '#161622'
+      }
+    }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      {/* <Text>Header</Text>
-			<Slot />
-    <Text>Footer</Text> */}
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      {/* <Stack.Screen name="(search/[query])" options={{ headerShown: false }} /> */}
+      
     </Stack>
   );
 };
