@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Slot, SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import GlobalProvider from "@/context/GlobalProvider";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,7 +30,9 @@ const RootLayout = () => {
     <GlobalProvider>
       <Stack
         screenOptions={{
-          animation: "slide_from_right",
+          animation: "fade",
+          animationDuration: 2000,
+          animationTypeForReplace: "push",
           contentStyle: {
             backgroundColor: "#161622",
           },

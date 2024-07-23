@@ -7,10 +7,22 @@ import { images } from "../constants";
 import CustomButton from "@/components/CustomButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
+ let ea;
 const index = () => {
   const { isLoading, isLoggedIn }: any = useGlobalContext();
   
-  if (isLoggedIn && !isLoading) return <Redirect href={"/home"}></Redirect>;
+  if (isLoading) {
+    return (
+      <View className="h-full w-full bg-white justify-center item items-center">
+        {/* <Text> Sedang Loadingn</Text> */}
+        <Image
+          source={images.logoSmall}
+        />
+      </View>
+  )
+  }
+
+  if (isLoggedIn) return <Redirect href={"/home"}></Redirect>;
 
   return (
     <SafeAreaView className="bg-primary h-full">
