@@ -1,11 +1,12 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, ScrollView, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "@/constants";
 import FormField from "@/components/FormField";
 import { useState } from "react";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { createUser } from "@/lib/appwrite";
 
 type Form = {
   username: string;
@@ -22,7 +23,27 @@ const SignUp = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {};
+  const submit = async () => {
+    if (!form.email || !form.password || !form.username) {
+      Alert.alert("Error", "Please fill in all the fields");
+    }
+    setIsSubmitting(true);
+
+    const username = form.username
+    const email = form.email
+    const password = form.password
+
+    try {
+      const result = await createUser({username, email, password});
+
+      // set it to global state
+      router.replace('/home')
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -58,17 +79,20 @@ const SignUp = () => {
           />
 
           <CustomButton
-            title="Login"
+            title="Sign Up"
             containerStyles="mt-7"
             handlePress={submit}
             isLoading={isSubmitting}
           />
 
           <View className="justify-center gap-2 pt-5 flex-row">
-            <Text className="text-lg text-gray-100 font-pregular">
-              have an account already?
-            </Text>
-            <Link className="text-lg font-psemibold text-secondary" href={'/sign-in'}>Sign in</Link>
+            <Text className="text-lg text-gray-100 font-pregular">have an account already?</Text>
+            <Link
+              className="text-lg font-psemibold text-secondary"
+              href={"/sign-in"}
+            >
+              Sign in
+            </Link>
           </View>
         </View>
       </ScrollView>
@@ -77,4 +101,3 @@ const SignUp = () => {
 };
 
 export default SignUp;
-

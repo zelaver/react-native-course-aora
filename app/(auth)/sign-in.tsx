@@ -1,11 +1,13 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "@/constants";
 import FormField from "@/components/FormField";
 import { useState } from "react";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { signIn } from "@/lib/appwrite";
+import { ToastAndroid } from "react-native";
 
 type Form = {
   email: string;
@@ -20,7 +22,34 @@ const SignIn = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {};
+  const submit = async () => {
+    if (!form.email || !form.password) {
+      Alert.alert("Error", "Please fill in all the fields");
+      return;
+    }
+    setIsSubmitting(true);
+
+    const email = form.email;
+    const password = form.password;
+
+    // console.log(email)
+    // console.log(password)
+
+    try {
+      const result = await signIn({ email, password });
+      // console.log(password);
+
+      // set it to global state
+      router.replace("/home");
+    } catch (error) {
+      if (error instanceof Error) {
+        ToastAndroid.show(`Error: ${error.message} ${error.cause}`, ToastAndroid.SHORT);
+      }
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -56,10 +85,13 @@ const SignIn = () => {
           />
 
           <View className="justify-center gap-2 pt-5 flex-row">
-            <Text className="text-lg text-gray-100 font-pregular">
-              Don't have account?
-            </Text>
-            <Link className="text-lg font-psemibold text-secondary" href={'/sign-up'}>Sign up</Link>
+            <Text className="text-lg text-gray-100 font-pregular">Don't have account?</Text>
+            <Link
+              className="text-lg font-psemibold text-secondary"
+              href={"/sign-up"}
+            >
+              Sign up
+            </Link>
           </View>
         </View>
       </ScrollView>
