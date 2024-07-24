@@ -1,28 +1,33 @@
-import { View, Text, SafeAreaView, FlatList, Image, RefreshControlComponent, RefreshControl } from "react-native";
-import React, { useState } from "react";
+import { View, Text, SafeAreaView, FlatList, Image, RefreshControlComponent, RefreshControl, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
 import { images } from "@/constants";
 import SearchInput from "@/components/SearchInput";
 import Trending from "@/components/Trending";
 import EmptyState from "@/components/EmptyState";
+import { getAllPost } from "@/lib/appwrite";
+import useAppwrite from "@/lib/useAppwrite";
+import VideoCard from "@/components/VideoCard";
 
 const Home = () => {
-  const data = [{ id: 1 }, { id: 2 }, { id: 3 }]
-  // const data: any = []
-  const [refreshing, setRefreshing] = useState<boolean>(false)
+  const {data: posts, isLoading, refetch} = useAppwrite(getAllPost);
 
+  // console.log(data)
+
+  const [refreshing, setRefreshing] = useState<boolean>(false)
   const onRefresh = async () => {
     setRefreshing(true)
     // re call videos -> if any new videos
+    await refetch();
     setRefreshing(false)
   }
 
   return (
-    <SafeAreaView className="bg-primary border-2  h-full">
+    <SafeAreaView className="bg-primary border-2 h-full">
       <FlatList
-        data={data}
-        // data={[{ id: 1 }, { id: 2 }, { id: 3 }]}
-        keyExtractor={(item) => `${item.id}`}
-        renderItem={({ item }) => <Text className="text-3xl text-white">{item.id}</Text>}
+        data={posts}
+        // posts={[{ id: 1 }, { id: 2 }, { id: 3 }]}
+        keyExtractor={(item) => `${item.$id}`}
+        renderItem={({ item }) => <VideoCard video={item}/>}
         ListHeaderComponent={() => (
           <View className="my-12 px-4 space-y-6">
             <View className="justify-between items-start flex-row mb-6">
@@ -40,7 +45,7 @@ const Home = () => {
             </View>
             <SearchInput placeholder="Search for a video topic" />
 
-            <View className={`w-full flex-1 pt-5 pb-8 ${data && 'hidden'}`}>
+            <View className={`w-full flex-1 pt-5 pb-8`}>
               <Text className="text-gray-100 text-lg font-pregular mb-3"> Latest Videos</Text>
               <Trending posts={[{id: 1}, {id: 2}] ?? []}/>
             </View>
