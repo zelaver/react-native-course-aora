@@ -7,7 +7,6 @@ import { images } from "../constants";
 import CustomButton from "@/components/CustomButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-let ea;
 const index = () => {
   const { isLoading, isLoggedIn }: any = useGlobalContext();
 

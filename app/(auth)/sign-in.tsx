@@ -6,8 +6,9 @@ import FormField from "@/components/FormField";
 import { useState } from "react";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { signIn } from "@/lib/appwrite";
+import { getCurrentUser, signIn } from "@/lib/appwrite";
 import { ToastAndroid } from "react-native";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 type Form = {
   email: string;
@@ -19,6 +20,8 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+
+  const { setUser, setIsLoggedIn }: any = useGlobalContext();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,20 +35,22 @@ const SignIn = () => {
     const email = form.email;
     const password = form.password;
 
-    // console.log(email)
-    // console.log(password)
+    console.log(email);
+    console.log(password);
 
     try {
-      const result = await signIn({ email, password });
-      // console.log(password);
+      await signIn({ email, password });
 
-      // set it to global state
+      const result = await getCurrentUser();
+      setUser(result)
+      setIsLoggedIn(true);
+
       router.replace("/home");
     } catch (error) {
       if (error instanceof Error) {
         ToastAndroid.show(`Error: ${error.message} ${error.cause}`, ToastAndroid.SHORT);
       }
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsSubmitting(false);
     }

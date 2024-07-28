@@ -68,14 +68,9 @@ export const createUser = async ({ email, password, username }: User) => {
 
 export const signIn = async ({ email, password }: User) => {
   try {
-    let info = await account.listSessions();
-    if (info) {
-      return info;
-    } else {
-      const newSession = await account.createEmailPasswordSession(email, password);
-      return newSession;
-    }
-    console.log(info);
+    const newSession = await account.createEmailPasswordSession(email, password);
+    return newSession;
+
   } catch (err) {
     if (err instanceof Error) {
       console.log(err.message);
@@ -132,13 +127,38 @@ export const getLatestPost = async () => {
 };
 
 export const searchPost = async (query: string | string[] | undefined) => {
-  if(typeof query !== 'string') throw "input value must typeof string"
+  if (typeof query !== "string") throw "input value must typeof string";
   try {
     const posts = await databases.listDocuments(databaseId, videoCollectionId, [
       Query.search("title", query),
     ]);
 
     return posts.documents;
+  } catch (e) {
+    if (e instanceof Error) {
+      throw e.message;
+    }
+  }
+};
+
+export const getUserPost = async (userId: string) => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.equal("creator", userId),
+    ]);
+    return posts.documents;
+  } catch (e) {
+    if (e instanceof Error) {
+      throw e.message;
+    }
+  }
+};
+
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession("current");
+
+    return session;
   } catch (e) {
     if (e instanceof Error) {
       throw e.message;
