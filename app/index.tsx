@@ -7,19 +7,17 @@ import { images } from "../constants";
 import CustomButton from "@/components/CustomButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
- let ea;
+let ea;
 const index = () => {
   const { isLoading, isLoggedIn }: any = useGlobalContext();
-  
+
   if (isLoading) {
     return (
       <View className="h-full w-full bg-white justify-center item items-center">
         {/* <Text> Sedang Loadingn</Text> */}
-        <Image
-          source={images.logoSmall}
-        />
+        <Image source={images.logoSmall} />
       </View>
-  )
+    );
   }
 
   if (isLoggedIn) return <Redirect href={"/home"}></Redirect>;
@@ -50,7 +48,11 @@ const index = () => {
               resizeMode="contain"
             />
           </View>
-          <Text className="text-sm font-pregular text-gray-100 mt-7 text-center"> Where creativity meets innovation: embark on a journey of limitless exploration with Aora</Text>
+          <Text className="text-sm font-pregular text-gray-100 mt-7 text-center">
+            {" "}
+            Where creativity meets innovation: embark on a journey of limitless exploration with
+            Aora
+          </Text>
 
           <CustomButton
             title="Continue with Email"

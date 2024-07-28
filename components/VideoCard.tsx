@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { icons } from "@/constants";
+import { ResizeMode, Video } from "expo-av";
 
 const VideoCard = ({
   video: {
@@ -10,7 +11,7 @@ const VideoCard = ({
     creator: { username, avatar },
   },
 }: any) => {
-  const [play, setPlay] = useState(false)
+  const [play, setPlay] = useState(false);
 
   return (
     <View className="flex-col items-center px-4 mb-14">
@@ -42,12 +43,29 @@ const VideoCard = ({
         </View>
       </View>
 
-      {play? (
-        <Text className="text-white">Play</Text>
-      ): (
-        <TouchableOpacity activeOpacity={0.6} onPress={() => setPlay(true)} className="w-full h-60 rounded-xl mt-3 relative justify-center items-center">
+      {play ? (
+        <Video
+          source={{ uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4" }}
+          className="w-full h-60 rounded-xl"
+          resizeMode={ResizeMode.CONTAIN}
+          useNativeControls
+          shouldPlay
+          onPlaybackStatusUpdate={(status: any) => {
+            if (status.didJustFinish) {
+              setPlay(false);
+            }
+          }}
+
+          // <Text>njir</Text>
+        />
+      ) : (
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => setPlay(true)}
+          className="w-full h-60 rounded-xl mt-3 relative justify-center items-center"
+        >
           <Image
-            source={{uri: thumbnail}}
+            source={{ uri: thumbnail }}
             className="w-full h-full rounded-xl mt-3"
             resizeMode="cover"
           />
@@ -58,7 +76,6 @@ const VideoCard = ({
           />
         </TouchableOpacity>
       )}
-
     </View>
   );
 };

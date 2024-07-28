@@ -11,7 +11,15 @@ export const config = {
   storageId: "669e4e90002dc5af66d1",
 };
 
-const { endpoint, platform, projectId, databaseId, userCollectionId, videoCollectionId, storageId } = config;
+const {
+  endpoint,
+  platform,
+  projectId,
+  databaseId,
+  userCollectionId,
+  videoCollectionId,
+  storageId,
+} = config;
 
 // Init your React Native SDK
 const client = new Client();
@@ -39,12 +47,17 @@ export const createUser = async ({ email, password, username }: User) => {
 
     const avatarUrl = avatars.getInitials(username);
     await signIn({ email, password });
-    const newUser = await databases.createDocument(config.databaseId, config.userCollectionId, ID.unique(), {
-      accountId: newAccount.$id,
-      email,
-      username,
-      avatar: avatarUrl,
-    });
+    const newUser = await databases.createDocument(
+      config.databaseId,
+      config.userCollectionId,
+      ID.unique(),
+      {
+        accountId: newAccount.$id,
+        email,
+        username,
+        avatar: avatarUrl,
+      }
+    );
 
     return newUser;
   } catch (err) {
@@ -77,7 +90,9 @@ export const getCurrentUser = async () => {
 
     if (!currentAccount) throw Error;
 
-    const currentUser = await databases.listDocuments(config.databaseId, config.userCollectionId, [Query.equal("accountId", currentAccount.$id)]);
+    const currentUser = await databases.listDocuments(config.databaseId, config.userCollectionId, [
+      Query.equal("accountId", currentAccount.$id),
+    ]);
 
     if (!currentUser) throw Error;
 
@@ -92,6 +107,36 @@ export const getCurrentUser = async () => {
 export const getAllPost = async () => {
   try {
     const posts = await databases.listDocuments(databaseId, videoCollectionId);
+
+    return posts.documents;
+  } catch (e) {
+    if (e instanceof Error) {
+      throw e.message;
+    }
+  }
+};
+
+export const getLatestPost = async () => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.orderDesc("$createdAt"),
+      Query.limit(3),
+    ]);
+
+    return posts.documents;
+  } catch (e) {
+    if (e instanceof Error) {
+      throw e.message;
+    }
+  }
+};
+
+export const searchPost = async (query: string | string[] | undefined) => {
+  if(typeof query !== 'string') throw "input value must typeof string"
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.search("title", query),
+    ]);
 
     return posts.documents;
   } catch (e) {
