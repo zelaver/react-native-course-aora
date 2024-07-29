@@ -5,10 +5,10 @@ import { Image } from "react-native";
 
 type FormField = {
   title: string;
-  value: string;
+  value?: string;
   placeholder?: string;
-  handleChangeText: (e: any) => void;
-  otherStyles: string;
+  handleChangeText?: (e: any) => void;
+  otherStyles?: string;
   keyboardType?: string;
 };
 

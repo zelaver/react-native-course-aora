@@ -12,7 +12,7 @@ const index = () => {
 
   if (isLoading) {
     return (
-      <View className="h-full w-full bg-white justify-center item items-center">
+      <View className="h-full w-full bg-primary justify-center item items-center">
         {/* <Text> Sedang Loadingn</Text> */}
         <Image source={images.logoSmall} />
       </View>
