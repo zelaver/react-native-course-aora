@@ -110,7 +110,9 @@ export const getCurrentUser = async () => {
 
 export const getAllPost = async () => {
   try {
-    const posts = await databases.listDocuments(databaseId, videoCollectionId);
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.orderDesc("$createdAt"),
+    ]);
 
     return posts.documents;
   } catch (e) {
@@ -201,14 +203,19 @@ export const uploadFile = async (file, type) => {
   if (!file) return;
 
   const { mimeType, ...rest } = file;
-  const asset = { type: mimeType, ...rest };
+  const asset = {
+    name: file.fileName,
+    type: file.mimeType,
+    size: file.fileSize,
+    uri: file.uri,
+  };
 
   try {
     const uploadedFile = await storage.createFile(storageId, ID.unique(), asset);
 
     const fileUrl = await getFilePreview(uploadedFile.$id, type);
 
-    return fileUrl
+    return fileUrl;
   } catch (e) {
     if (e instanceof Error) {
       throw e.message;
@@ -222,8 +229,6 @@ export const createVideo = async (form) => {
       uploadFile(form.thumbnail, "image"),
       uploadFile(form.video, "video"),
     ]);
-    
-  
 
     const newPost = await databases.createDocument(databaseId, videoCollectionId, ID.unique(), {
       title: form.title,
@@ -232,11 +237,11 @@ export const createVideo = async (form) => {
       prompt: form.prompt,
       creator: form.userId,
     });
-    console.log(form.userId)
+    console.log(form.userId);
     return newPost;
   } catch (e) {
     if (e instanceof Error) {
-      console.log(e.message)
+      console.log(e.message);
     }
   }
 };

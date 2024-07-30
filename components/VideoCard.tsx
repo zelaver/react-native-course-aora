@@ -12,7 +12,7 @@ const VideoCard = ({
   },
 }: any) => {
   const [play, setPlay] = useState(false);
-
+  console.log()
   return (
     <View className="flex-col items-center px-4 mb-14">
       <View className="flex-row gap-3 items-start">
@@ -45,7 +45,7 @@ const VideoCard = ({
 
       {play ? (
         <Video
-          source={{ uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4" }}
+          source={{ uri: video }}
           className="w-full h-60 rounded-xl"
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls

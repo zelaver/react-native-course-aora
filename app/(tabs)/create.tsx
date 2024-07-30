@@ -4,7 +4,7 @@ import FormField from "@/components/FormField";
 import { ResizeMode, Video } from "expo-av";
 import { icons } from "@/constants";
 import CustomButton from "@/components/CustomButton";
-import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import { createVideo } from "@/lib/appwrite";
 import { useGlobalContext } from "@/context/GlobalProvider";
@@ -20,8 +20,13 @@ const Create = () => {
   });
 
   const openPicker = async (selecType: string) => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: selecType === "image" ? ["image/png", "image/jpg", "image/jpeg"] : ["video/mp4", "video/gif"],
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes:
+        selecType === "image"
+          ? ImagePicker.MediaTypeOptions.Images
+          : ImagePicker.MediaTypeOptions.Videos,
+      aspect: [4, 3],
+      quality: 1,
     });
 
     if (!result.canceled) {
@@ -42,7 +47,7 @@ const Create = () => {
     if (!form.prompt || !form.title || !form.thumbnail || !form.video) {
       return Alert.alert("Please fill in all the fields");
     }
-    setUploading(true)
+    setUploading(true);
     try {
       await createVideo({
         ...form,
