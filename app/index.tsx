@@ -8,9 +8,9 @@ import CustomButton from "@/components/CustomButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 const index = () => {
-  const { isLoading, isLoggedIn }: any = useGlobalContext();
+  const { isLoadingUser, isLoggedIn }: any = useGlobalContext();
 
-  if (isLoading) {
+  if (isLoadingUser) {
     return (
       <View className="h-full w-full bg-primary justify-center item items-center">
         {/* <Text> Sedang Loadingn</Text> */}

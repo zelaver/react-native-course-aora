@@ -253,15 +253,15 @@ export const toggleBookmark = async (videoId, likes, userId, likeState) => {
     // let deleted = [...likes].filter(({ $id }) => $id !== userId);
     // console.log(deleted);
     if (likeState) {
-      await databases.updateDocument(databaseId, videoCollectionId, videoId, {
+      const result = await databases.updateDocument(databaseId, videoCollectionId, videoId, {
         likes: [...likes].filter(({ $id }) => $id !== userId),
       });
-      return "unliked";
+      return result;
     } else {
-      await databases.updateDocument(databaseId, videoCollectionId, videoId, {
+      const result = await databases.updateDocument(databaseId, videoCollectionId, videoId, {
         likes: [...likes, userId],
       });
-      return "liked";
+      return result;
     }
   } catch (e) {
     if (e instanceof Error) {

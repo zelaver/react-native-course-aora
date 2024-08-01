@@ -24,7 +24,7 @@ import InfoBox from "@/components/InfoBox";
 const Profile = () => {
   // const { query } = useLocalSearchParams();
   const { user, setUser, setIsLoggedIn }: any = useGlobalContext();
-  const { data: posts, isLoading, refetch } = useAppwrite(() => getUserPost(user.$id));
+  const { data: posts, isLoadingPost, refetch } = useAppwrite(() => getUserPost(user.$id));
 
   const logout = async () => {
     // todo: logout logic

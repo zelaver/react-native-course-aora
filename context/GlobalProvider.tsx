@@ -1,4 +1,5 @@
-import { getCurrentUser } from "@/lib/appwrite";
+import { getAllPost, getCurrentUser } from "@/lib/appwrite";
+import useAppwrite from "@/lib/useAppwrite";
 import { createContext, useContext, useState, useEffect } from "react";
 
 interface GlobalContextType {
@@ -6,47 +7,59 @@ interface GlobalContextType {
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   user: any;
   setUser: React.Dispatch<React.SetStateAction<any>>;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoadingUser: boolean;
+  setIsLoadingUser: React.Dispatch<React.SetStateAction<boolean>>;
+  posts: any;
+  refetch: () => Promise<void>;
+  isLoadingPost: boolean;
 }
-
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
-export const useGlobalContext = () => useContext(GlobalContext)
+export const useGlobalContext = () => useContext(GlobalContext);
 
-const GlobalProvider = ({children}: any) => {
-  const [isLoggedIn, setisLoggedIn] = useState(false)
-  const [user, setUser] = useState<any>()
-  const [isLoading, setIsLoading] = useState(true)
+const GlobalProvider = ({ children }: any) => {
+  const [isLoggedIn, setisLoggedIn] = useState(false);
+  const { data: posts, isLoadingPost, refetch } = useAppwrite(getAllPost);
+  const [user, setUser] = useState<any>();
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
+  // console.log(posts);
   useEffect(() => {
-    getCurrentUser().then((res) => {
-      if(res) {
-        setisLoggedIn(true)
-        setUser(res)
-      } else {
-        setisLoggedIn(false)
-        setUser(null)
-      }
-    }).catch((error) => {
-      error instanceof Error && console.log(error)
-    }).finally(() => {
-      setIsLoading(false);
-    })
-  }, [])
+    getCurrentUser()
+      .then((res) => {
+        if (res) {
+          setisLoggedIn(true);
+          setUser(res);
+        } else {
+          setisLoggedIn(false);
+          setUser(null);
+        }
+      })
+      .catch((error) => {
+        error instanceof Error && console.log(error);
+      })
+      .finally(() => {
+        setIsLoadingUser(false);
+      });
+  }, []);
 
   return (
-    <GlobalContext.Provider value={{
-      isLoggedIn: isLoggedIn,
-      setIsLoggedIn: setisLoggedIn,
-      setIsLoading: setIsLoading,
-      user: user,
-      setUser: setUser,
-      isLoading: isLoading
-    }}>
+    <GlobalContext.Provider
+      value={{
+        isLoggedIn: isLoggedIn,
+        setIsLoggedIn: setisLoggedIn,
+        setIsLoadingUser: setIsLoadingUser,
+        isLoadingUser: isLoadingUser,
+        user: user,
+        setUser: setUser,
+        posts: posts,
+        isLoadingPost: isLoadingPost,
+        refetch: refetch,
+      }}
+    >
       {children}
     </GlobalContext.Provider>
-  )
-}
+  );
+};
 
 export default GlobalProvider;

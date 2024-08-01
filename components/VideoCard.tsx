@@ -17,16 +17,32 @@ const VideoCard = ({
   },
 }: any) => {
   const [play, setPlay] = useState(false);
-  const { user, setUser, setIsLoggedIn }: any = useGlobalContext();
+  const [currentlikes, setCurrentLikes] = useState(likes)
+  const { user, setUser, setIsLoggedIn, refetch }: any = useGlobalContext();
   const [isLiked, setIsLiked] = useState(
     likes.some(({ $id }: { $id: string }) => $id === user.$id)
   );
+  
+
+
+  // console.log(likes)
+
+  const [refreshing, setRefreshing] = useState<boolean>(false)
+  const onRefresh = async () => {
+    setRefreshing(true)
+    // re call videos -> if any new videos
+    await refetch();
+    setRefreshing(false)
+  }
+  
 
   const onLike = async () => {
     try {
-      const result = await toggleBookmark($id, likes, user.$id, isLiked);
+      const result = await toggleBookmark($id, currentlikes, user.$id, isLiked);
+      setCurrentLikes(result?.likes)
       setIsLiked(!isLiked);
-      console.log(result);
+      onRefresh()
+      // console.log('kocak');
     } catch (e) {
       if (e instanceof Error) {
         console.log(e.message)

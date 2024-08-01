@@ -4,10 +4,10 @@ import { Alert } from "react-native";
 
 const useAppwrite = (fn: CallableFunction) => {
   const [data, setData] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingPost, setIsLoadingPost] = useState(true);
 
   const fetchData = async () => {
-    setIsLoading(true);
+    setIsLoadingPost(true);
 
     try {
       const response = await fn();
@@ -18,7 +18,7 @@ const useAppwrite = (fn: CallableFunction) => {
         Alert.alert("errors", e.message);
       }
     } finally {
-      setIsLoading(false);
+      setIsLoadingPost(false);
     }
   };
 
@@ -28,7 +28,7 @@ const useAppwrite = (fn: CallableFunction) => {
 
   const refetch = () => fetchData();
 
-  return { data, refetch, isLoading };
+  return { data, refetch, isLoadingPost };
 };
 
 export default useAppwrite;

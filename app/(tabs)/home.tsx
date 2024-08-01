@@ -7,12 +7,15 @@ import EmptyState from "@/components/EmptyState";
 import { getAllPost, getLatestPost } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import VideoCard from "@/components/VideoCard";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const Home = () => {
-  const {data: posts, isLoading, refetch} = useAppwrite(getAllPost);
-  const {data: latestPosts } = useAppwrite(getLatestPost);
+  // const {data: posts, isLoadingPost, refetch} = useAppwrite(getAllPost);
+  const {posts, isLoadingPost, refetch} : any = useGlobalContext();
 
-  // console.log(posts)
+  const {data: latestPosts } = useAppwrite(getLatestPost);
+  
+  // console.log(posts[0].likes)
 
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const onRefresh = async () => {
@@ -20,6 +23,22 @@ const Home = () => {
     // re call videos -> if any new videos
     await refetch();
     setRefreshing(false)
+  }
+
+  if (isLoadingPost) {
+    return (
+      <View className="bg-primary h-full py-12">
+        <View className="mb-4 px-4">
+            <View>
+              <Text className="text-2xl text-white font-psemibold">Saved Videos</Text>
+            </View>
+            <SearchInput
+              otherStyles="mt-4"
+              placeholder="Search your saved videos"
+            />
+          </View>
+      </View>
+    );
   }
 
   return (
