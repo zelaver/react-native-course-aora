@@ -6,7 +6,7 @@ import FormField from "@/components/FormField";
 import { useState } from "react";
 import CustomButton from "@/components/CustomButton";
 import { Link, router } from "expo-router";
-import { createUser, getCurrentUser } from "@/lib/appwrite";
+import { createUser, getCurrentUser, signOut } from "@/lib/appwrite";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
 type Form = {
@@ -38,7 +38,7 @@ const SignUp = () => {
 
     try {
       const result = await createUser({ username, email, password });
-
+      // await signOut()
       // set it to global state
       setUser(result);
       setIsLoggedIn(true);

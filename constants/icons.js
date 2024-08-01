@@ -1,4 +1,8 @@
-import bookmark from "../assets/icons/bookmark.png";
+import bookmarkLine from "../assets/icons/bookmark-line.png";
+import bookmarkFill from "../assets/icons/bookmark-line.png";
+import heartLine from "../assets/icons/heart-line.png";
+import heartFill from "../assets/icons/heart-fill.png";
+import bookmark from "../assets/icons/bookmark-line.png";
 import home from "../assets/icons/home.png";
 import plus from "../assets/icons/plus.png";
 import profile from "../assets/icons/profile.png";
@@ -15,6 +19,10 @@ import play from "../assets/icons/play.png";
 export default {
   play,
   bookmark,
+  bookmarkLine,
+  heartLine,
+  heartFill,
+  bookmarkFill,
   home,
   plus,
   profile,

@@ -1,3 +1,5 @@
+// BUAT DATABASE APPWRITE DARI AWAL :((
+
 import { Easing } from "react-native";
 import {
   Client,
@@ -14,9 +16,9 @@ export const config = {
   endpoint: "https://cloud.appwrite.io/v1",
   platform: "com.jsm.aora",
   projectId: "669e4ab7001938457059",
-  databaseId: "669e4c050007515ddc21",
-  userCollectionId: "669e4c36003ca932b369",
-  videoCollectionId: "669e4c67002b1ca933e0",
+  databaseId: "66aadb0e00300f1bc411",
+  userCollectionId: "66aadbe1000e873a8454",
+  videoCollectionId: "66aadbf3001c3ced4a65",
   storageId: "669e4e90002dc5af66d1",
 };
 
@@ -52,7 +54,7 @@ type User = {
 export const createUser = async ({ email, password, username }: User) => {
   try {
     const newAccount = await account.create(ID.unique(), email, password, username);
-
+    console.log(newAccount);
     if (!newAccount) throw Error;
 
     const avatarUrl = avatars.getInitials(username);
@@ -239,6 +241,28 @@ export const createVideo = async (form) => {
     });
     console.log(form.userId);
     return newPost;
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e.message);
+    }
+  }
+};
+
+export const toggleBookmark = async (videoId, likes, userId, likeState) => {
+  try {
+    // let deleted = [...likes].filter(({ $id }) => $id !== userId);
+    // console.log(deleted);
+    if (likeState) {
+      await databases.updateDocument(databaseId, videoCollectionId, videoId, {
+        likes: [...likes].filter(({ $id }) => $id !== userId),
+      });
+      return "unliked";
+    } else {
+      await databases.updateDocument(databaseId, videoCollectionId, videoId, {
+        likes: [...likes, userId],
+      });
+      return "liked";
+    }
   } catch (e) {
     if (e instanceof Error) {
       console.log(e.message);

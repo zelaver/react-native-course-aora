@@ -25,7 +25,7 @@ const SearchInput = ({
   const [query, setQuery] = useState("");
 
   return (
-    <View className="flex-row w-full h-16 px-4 bg-black-100 border-2 border-black-200 rounded-2xl focus:border-secondary items-center space-x-4">
+    <View className={`flex-row w-full h-16 px-4 bg-black-100 border-2 border-black-200 rounded-2xl focus:border-secondary items-center space-x-4 ${otherStyles}`}>
       <TextInput
         className="mt-0.5 text-base flex-1 font-pregular text-white"
         value={query}

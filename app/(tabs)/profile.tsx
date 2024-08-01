@@ -28,10 +28,10 @@ const Profile = () => {
 
   const logout = async () => {
     // todo: logout logic
-    await signOut()
-    setUser(null)
-    setIsLoggedIn(false)
-    router.replace('/sign-in')
+    await signOut();
+    setUser(null);
+    setIsLoggedIn(false);
+    router.replace("/sign-in");
   };
 
   return (

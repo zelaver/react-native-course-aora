@@ -12,7 +12,7 @@ const Home = () => {
   const {data: posts, isLoading, refetch} = useAppwrite(getAllPost);
   const {data: latestPosts } = useAppwrite(getLatestPost);
 
-  // console.log(data)
+  // console.log(posts)
 
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const onRefresh = async () => {

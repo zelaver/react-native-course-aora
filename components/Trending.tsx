@@ -16,7 +16,6 @@ const zoomIn: Animatable.CustomAnimation = {
   0: {
     scaleX: 0.9,
     scaleY: 0.9,
-    
   },
   1: {
     scaleX: 1.1,
@@ -44,18 +43,20 @@ const TrendingItem = ({ activeItem, item }: any) => {
     >
       {play ? (
         <Video
-          source={{ uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+          source={{
+            uri: item ? item.video : "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+          }}
           className="w-52 h-72 rounded-[35px] mt-3 bg-white/10"
           resizeMode={ResizeMode.CONTAIN}
           useNativeControls
           shouldPlay
-          onPlaybackStatusUpdate={(status : any) => {
-            if(status.didJustFinish) {
-              setPlay(false)
+          onPlaybackStatusUpdate={(status: any) => {
+            if (status.didJustFinish) {
+              setPlay(false);
             }
           }}
-          
-        // <Text>njir</Text>  
+
+          // <Text>njir</Text>
         />
       ) : (
         <TouchableOpacity
